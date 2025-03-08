@@ -1,256 +1,5 @@
-// "use client";
-// import { Quicksand } from "next/font/google";
-// import { useState, useEffect } from "react";
-// import Link from "next/link";
-// import { Button } from "@/components/ui/button";
-// import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-// import {
-//     Menu,
-//     Code2,
-//     Brain,
-//     BookCheck,
-//     LogIn,
-//     MessageCircle,
-//     Terminal,
-//     FileCode,
-//     X,
-//     ArrowUp,
-//     AlertCircle,
-// } from "lucide-react";
-// import { cn } from "@/lib/utils";
-// import * as Dialog from "@radix-ui/react-dialog";
-// import { useUser, UserButton } from "@clerk/clerk-react";
-
-// const quick = Quicksand({
-//     subsets: ["latin"],
-//     weight: ["500", "700"]
-// });
-
-// const routes = [
-//     {
-//         label: "Practice",
-//         icon: FileCode,
-//         href: "/practice",
-//     },
-//     {
-//         label: "AI Interview",
-//         icon: Brain,
-//         href: "/interview",
-//     },
-//     {
-//         label: "Assessments",
-//         icon: BookCheck,
-//         href: "/assessments",
-//     },
-//     {
-//         label: "Editor",
-//         icon: Terminal,
-//         href: "/editor",
-//     },
-//     {
-//         label: "Chat",
-//         icon: MessageCircle,
-//         href: "/chat",
-//     },
-// ];
-
-// export function Navbar() {
-//     const [isOpen, setIsOpen] = useState(false);
-//     const [showNotification, setShowNotification] = useState(true);
-//     const { isLoaded, user } = useUser();
-//     const [showScrollTop, setShowScrollTop] = useState(false);
-
-//     useEffect(() => {
-//         const handleScroll = () => {
-//             setShowScrollTop(window.scrollY > 300);
-//         };
-
-//         window.addEventListener("scroll", handleScroll);
-//         return () => window.removeEventListener("scroll", handleScroll);
-//     }, []);
-
-//     const scrollToTop = () => {
-//         window.scrollTo({ top: 0, behavior: "smooth" });
-//     };
-
-//     return (
-//         <>
-//             {showNotification && (
-//                 <div className="flex justify-between items-center bg-gradient-to-r from-blue-500 to-violet-500 text-white p-1 shadow-lg">
-//                     <AlertCircle className="flex-shrink-0" size={20} />
-//                     <span className="flex-1 text-center">
-//                         We're still cooking our service. Sorry for any inconvenience.
-//                     </span>
-//                     <button
-//                         className="text-black"
-//                         onClick={() => setShowNotification(false)}
-//                     >
-//                         <X size={20} className="text-white hover:bg-gray-200/20" />
-//                     </button>
-//                 </div>
-//             )}
-//             <nav className="w-full bg-[#0a0a0a] backdrop-blur supports-[backdrop-filter]:bg-black/100 z-10">
-//                 <div className="flex h-16 items-center justify-between px-20 w-full">
-//                     <Link href="/" className={`flex items-center gap-2 ${quick.className}`}>
-//                         <Code2 className="h-8 w-8 text-blue-400" />
-//                         <span className="text-xl font-bold tracking-tight text-white">
-//                             Algo<span className="text-blue-400">Evaluator</span>{" "}
-//                             <span
-//                                 className="text-xs absolute border-none text-white bg-blue-400 border-2 ml-1 px-2 py-0.5 rounded-lg">
-//                                 Beta
-//                             </span>
-//                         </span>
-//                     </Link>
-//                     <div className="hidden md:flex flex-1 justify-between items-center px-20 ml-32">
-//                         <div className="flex gap-6">
-//                             {routes.map((route) => (
-//                                 <Link
-//                                     key={route.href}
-//                                     href={route.href}
-//                                     className={cn(
-//                                         "flex items-center gap-2 text-sm font-medium transition-colors hover:text-blue-300",
-//                                         "text-white"
-//                                     )}
-//                                 >
-//                                     <route.icon className="h-4 w-4" />
-//                                     {route.label}
-//                                 </Link>
-//                             ))}
-//                         </div>
-//                         <div className="flex items-center gap-4">
-//                             {!isLoaded ? (
-//                                 <span>Loading...</span>
-//                             ) : user ? (
-//                                 <div className="flex gap-4">
-//                                     <Button
-//                                         variant="ghost"
-//                                         className="text-white border-blue-400 border-2 hover:border-none"
-//                                         asChild
-//                                     >
-//                                         <Link href="/dashboard" className="text-white">
-//                                             Dashboard
-//                                         </Link>
-//                                     </Button>
-//                                     <UserButton />
-//                                 </div>
-//                             ) : (
-//                                 <div className="flex gap-4">
-//                                     <Button
-//                                         variant="ghost"
-//                                         className="text-white hover:text-blue-500"
-//                                         asChild
-//                                     >
-//                                         <Link href="/sign-in">
-//                                             <LogIn className="mr-2 h-4 w-4 text-blue-500" />
-//                                             Login
-//                                         </Link>
-//                                     </Button>
-//                                     <Button
-//                                         className="bg-blue-400 text-white hover:bg-blue-500"
-//                                         asChild
-//                                     >
-//                                         <Link href="/sign-up">Sign up</Link>
-//                                     </Button>
-//                                 </div>
-//                             )}
-//                         </div>
-//                     </div>
-
-//                     <div className="flex flex-1 justify-end md:hidden">
-//                         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-//                             <SheetTrigger asChild>
-//                                 <Button
-//                                     variant="ghost"
-//                                     className="text-blue-300 hover:text-blue-400 size-icon"
-//                                 >
-//                                     <Menu className="h-6 w-6" />
-//                                 </Button>
-//                             </SheetTrigger>
-//                             <SheetContent
-//                                 side="right"
-//                                 className="w-64 bg-gray-900 text-white shadow-lg"
-//                             >
-//                                 <Dialog.Title className="sr-only">
-//                                     Mobile Navigation
-//                                 </Dialog.Title>
-//                                 <div className="flex flex-col gap-6 mt-8 px-4">
-//                                     {routes.map((route) => (
-//                                         <Link
-//                                             key={route.href}
-//                                             href={route.href}
-//                                             onClick={() => setIsOpen(false)}
-//                                             className={cn(
-//                                                 "flex items-center gap-3 text-sm font-semibold transition-all duration-200",
-//                                                 "text-gray-300 hover:text-blue-300 p-3 rounded-lg hover:bg-gray-800 shadow-sm"
-//                                             )}
-//                                         >
-//                                             <route.icon className="h-5 w-5 text-blue-300" />
-//                                             {route.label}
-//                                         </Link>
-//                                     ))}
-//                                     <div className="flex gap-4">
-//                                         {!isLoaded ? (
-//                                             <span>Loading...</span>
-//                                         ) : user ? (
-//                                             <div className="flex gap-4">
-//                                                 <Button
-//                                                     variant="ghost"
-//                                                     className="text-white border-blue-400 border-2 hover:border-none"
-//                                                     asChild
-//                                                 >
-//                                                     <Link href="/dashboard" className="text-white">
-//                                                         Dashboard
-//                                                     </Link>
-//                                                 </Button>
-//                                                 <UserButton />
-//                                             </div>
-//                                         ) : (
-//                                             <div className="flex gap-4">
-//                                                 <Button
-//                                                     variant="ghost"
-//                                                     className="text-white hover:text-blue-500"
-//                                                     asChild
-//                                                 >
-//                                                     <Link href="/sign-in">
-//                                                         <LogIn className="mr-2 h-4 w-4 text-blue-500" />
-//                                                         Login
-//                                                     </Link>
-//                                                 </Button>
-//                                                 <Button
-//                                                     className="bg-blue-400 text-white hover:bg-blue-500"
-//                                                     asChild
-//                                                 >
-//                                                     <Link href="/sign-up">Sign up</Link>
-//                                                 </Button>
-//                                             </div>
-//                                         )}
-//                                     </div>
-//                                 </div>
-//                             </SheetContent>
-//                         </Sheet>
-//                     </div>
-//                 </div>
-//             </nav>
-//             {showScrollTop && (
-//                 <button
-//                     onClick={scrollToTop}
-//                     aria-label="Scroll to top"
-//                     className="fixed bottom-6 right-6 bg-gradient-to-tl text-white p-3 rounded-full shadow-lg transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 z-50 backdrop-blur-sm animate-fade-in group"
-//                 >
-//                     <ArrowUp
-//                         size={24}
-//                         className="transition-transform group-hover:-translate-y-1"
-//                     />
-//                     <span className="absolute inset-0 rounded-full bg-white opacity-25 group-hover:animate-ping" />
-//                 </button>
-//             )}
-//         </>
-//     );
-// }
-
-// export default Navbar;'
-
 "use client";
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -275,7 +24,11 @@ import {
     X,
     ArrowUp,
     AlertCircle,
-    ChevronRight
+    ChevronRight,
+    Music,
+    Volume2,
+    ChevronLeft,
+    Sparkles
 } from 'lucide-react';
 import GlobalVisitTracker from './components/GlobalVisitTracker';
 
@@ -310,6 +63,8 @@ const routes = [
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [showNotification, setShowNotification] = useState(true);
+    const [showMusicTab, setShowMusicTab] = useState(true);
+    const [isMusicTabHovered, setIsMusicTabHovered] = useState(false);
     const { isLoaded, user } = useUser();
     const [showScrollTop, setShowScrollTop] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -336,6 +91,96 @@ export function Navbar() {
 
     return (
         <>
+            {/* Slide-out Music Announcement */}
+            <AnimatePresence>
+                {showMusicTab && (
+                    <motion.div
+                        initial={{ x: "calc(100% - 56px)" }}
+                        animate={{ 
+                            x: isMusicTabHovered ? 0 : "calc(100% - 56px)",
+                            transition: {
+                                type: "spring",
+                                stiffness: 400,
+                                damping: 40
+                            }
+                        }}
+                        exit={{ x: "100%", transition: { duration: 0.2 } }}
+                        onHoverStart={() => setIsMusicTabHovered(true)}
+                        onHoverEnd={() => setIsMusicTabHovered(false)}
+                        className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-center"
+                    >
+                        <div className="flex items-center bg-gradient-to-r from-blue-600 to-cyan-600 rounded-l-2xl shadow-2xl overflow-hidden backdrop-blur-sm border border-white/10">
+                            <motion.div 
+                                className="flex items-center p-4 text-white"
+                                animate={{
+                                    backgroundColor: isMusicTabHovered ? "rgba(255, 255, 255, 0.1)" : "transparent"
+                                }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <ChevronLeft className={cn(
+                                    "h-6 w-6 transition-transform duration-300",
+                                    isMusicTabHovered ? "rotate-180" : ""
+                                )} />
+                            </motion.div>
+                            <motion.div 
+                                className="flex items-center gap-5 p-4 pr-6"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.1 }}
+                            >
+                                <div className="relative">
+                                    <div className="flex items-center justify-center h-12 w-12 rounded-full bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-md">
+                                        <Music className="h-6 w-6 text-white" />
+                                    </div>
+                                    <motion.div
+                                        className="absolute -top-1 -right-1"
+                                        animate={{
+                                            scale: [1, 1.2, 1],
+                                            rotate: [0, 10, 0]
+                                        }}
+                                        transition={{
+                                            duration: 2,
+                                            repeat: Infinity,
+                                            repeatType: "reverse"
+                                        }}
+                                    >
+                                        <Sparkles className="h-4 w-4 text-yellow-300" />
+                                    </motion.div>
+                                </div>
+                                <div className="flex flex-col min-w-[220px]">
+                                    <div className="flex items-center gap-2">
+                                        <h3 className="text-sm font-semibold text-white">New Feature!</h3>
+                                        <span className="px-2 py-0.5 text-[10px] font-medium bg-white/20 rounded-full text-white">Just Added</span>
+                                    </div>
+                                    <p className="text-sm text-blue-100 mt-0.5">Enhance Focus with Calm Music</p>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <Button
+                                        variant="secondary"
+                                        size="sm"
+                                        className="bg-white/10 text-white hover:bg-white/20 hover:text-white border border-white/20 backdrop-blur-sm whitespace-nowrap shadow-lg"
+                                        onClick={() => window.location.href = '/music'}
+                                    >
+                                        <Volume2 className="w-4 h-4 mr-2" />
+                                        Try Now
+                                    </Button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowMusicTab(false);
+                                        }}
+                                        className="p-2 rounded-full hover:bg-white/10 transition-colors group"
+                                        aria-label="Close announcement"
+                                    >
+                                        <X className="h-4 w-4 text-white/70 group-hover:text-white transition-colors" />
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <AnimatePresence>
                 {showNotification && (
                     <motion.div
