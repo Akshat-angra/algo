@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,11 +23,7 @@ import {
     X,
     ArrowUp,
     AlertCircle,
-    ChevronRight,
-    Music,
-    Volume2,
-    ChevronLeft,
-    Sparkles
+    ChevronRight
 } from 'lucide-react';
 import GlobalVisitTracker from './components/GlobalVisitTracker';
 
@@ -63,8 +58,6 @@ const routes = [
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [showNotification, setShowNotification] = useState(true);
-    const [showMusicTab, setShowMusicTab] = useState(true);
-    const [isMusicTabHovered, setIsMusicTabHovered] = useState(false);
     const { isLoaded, user } = useUser();
     const [showScrollTop, setShowScrollTop] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -91,96 +84,6 @@ export function Navbar() {
 
     return (
         <>
-            {/* Slide-out Music Announcement */}
-            <AnimatePresence>
-                {showMusicTab && (
-                    <motion.div
-                        initial={{ x: "calc(100% - 56px)" }}
-                        animate={{ 
-                            x: isMusicTabHovered ? 0 : "calc(100% - 56px)",
-                            transition: {
-                                type: "spring",
-                                stiffness: 400,
-                                damping: 40
-                            }
-                        }}
-                        exit={{ x: "100%", transition: { duration: 0.2 } }}
-                        onHoverStart={() => setIsMusicTabHovered(true)}
-                        onHoverEnd={() => setIsMusicTabHovered(false)}
-                        className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex items-center"
-                    >
-                        <div className="flex items-center bg-gradient-to-r from-blue-600 to-cyan-600 rounded-l-2xl shadow-2xl overflow-hidden backdrop-blur-sm border border-white/10">
-                            <motion.div 
-                                className="flex items-center p-4 text-white"
-                                animate={{
-                                    backgroundColor: isMusicTabHovered ? "rgba(255, 255, 255, 0.1)" : "transparent"
-                                }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <ChevronLeft className={cn(
-                                    "h-6 w-6 transition-transform duration-300",
-                                    isMusicTabHovered ? "rotate-180" : ""
-                                )} />
-                            </motion.div>
-                            <motion.div 
-                                className="flex items-center gap-5 p-4 pr-6"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.1 }}
-                            >
-                                <div className="relative">
-                                    <div className="flex items-center justify-center h-12 w-12 rounded-full bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-md">
-                                        <Music className="h-6 w-6 text-white" />
-                                    </div>
-                                    <motion.div
-                                        className="absolute -top-1 -right-1"
-                                        animate={{
-                                            scale: [1, 1.2, 1],
-                                            rotate: [0, 10, 0]
-                                        }}
-                                        transition={{
-                                            duration: 2,
-                                            repeat: Infinity,
-                                            repeatType: "reverse"
-                                        }}
-                                    >
-                                        <Sparkles className="h-4 w-4 text-yellow-300" />
-                                    </motion.div>
-                                </div>
-                                <div className="flex flex-col min-w-[220px]">
-                                    <div className="flex items-center gap-2">
-                                        <h3 className="text-sm font-semibold text-white">New Feature!</h3>
-                                        <span className="px-2 py-0.5 text-[10px] font-medium bg-white/20 rounded-full text-white">Just Added</span>
-                                    </div>
-                                    <p className="text-sm text-blue-100 mt-0.5">Enhance Focus with Calm Music</p>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <Button
-                                        variant="secondary"
-                                        size="sm"
-                                        className="bg-white/10 text-white hover:bg-white/20 hover:text-white border border-white/20 backdrop-blur-sm whitespace-nowrap shadow-lg"
-                                        onClick={() => window.location.href = '/music'}
-                                    >
-                                        <Volume2 className="w-4 h-4 mr-2" />
-                                        Try Now
-                                    </Button>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setShowMusicTab(false);
-                                        }}
-                                        className="p-2 rounded-full hover:bg-white/10 transition-colors group"
-                                        aria-label="Close announcement"
-                                    >
-                                        <X className="h-4 w-4 text-white/70 group-hover:text-white transition-colors" />
-                                    </button>
-                                </div>
-                            </motion.div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
             <AnimatePresence>
                 {showNotification && (
                     <motion.div
